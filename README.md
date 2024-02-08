@@ -59,5 +59,10 @@ All ADT types share these methods:
 *parameters*: `None`
 *return*: `String`
 
-You can change the **BUFFER**, by default is set at `1024`.
+You can change the **BUFFER** when you define the object, by default is set at `1024`.
+```
+FixedStack myStack = new FixedStack(); //BUFFER = 1024
+FixedStack myStack = new FixedStack(8); //BUFFER = 8
+```
+
 
