@@ -19,12 +19,18 @@ interface Queue extends Container {
 class FixedStack implements Stack{      //JAVA stack like
 
     //CLASS VARIABLES
-    private final int BUFFER = 1024;       //FIXED buffer
+    private final int BUFFER;       //FIXED buffer
     private int vSize;                    //virtual size
     private Object[] v;                   //array
 
     //CLASS METHODS
     public FixedStack() {                   //constructor
+        BUFFER = 1024;
+        v = new Object[BUFFER];
+        makeEmpty();                        //set the size to 0
+    }
+    public FixedStack(int buffer) {                   //constructor user defined
+        BUFFER = buffer;
         v = new Object[BUFFER];
         makeEmpty();                        //set the size to 0
     }
@@ -60,7 +66,7 @@ class FixedStack implements Stack{      //JAVA stack like
         v[vSize] = obj;                 //add the element
         vSize++;                        //increment the virtual size
     }
-    public Object pop() {               //reamove
+    public Object pop() {               //remove
         if (vSize == 0) {                   //If it's empty it throws runtime type error
             throw new EmptyStackException();
         }
@@ -78,7 +84,7 @@ class FixedStack implements Stack{      //JAVA stack like
 
 class CycleStack implements Stack {         //Memory action like
     //CLASS VARIABLES
-    private final int BUFFER = 1024;           
+    private final int BUFFER;           
     private int vSize;          //virtual size
     private int stopPoint;      //stop point (where the stack stored the first element)
     private int addPoint;       //add point (where the stack stored the last element)
@@ -86,6 +92,12 @@ class CycleStack implements Stack {         //Memory action like
 
     //CLASS METHODS
     public CycleStack() {       //constructor
+        BUFFER = 1024;
+        v = new Object[BUFFER];
+        makeEmpty();
+    }
+    public CycleStack(int buffer) {       //constructor user defined
+        BUFFER = buffer;
         v = new Object[BUFFER];
         makeEmpty();
     }
@@ -166,17 +178,23 @@ class CycleStack implements Stack {         //Memory action like
 
 class GrowingStack implements Stack{
     //CLASS VARIABLES
-    private int BUFFER = 1024;
+    private int BUFFER;
     private int vSize;
     private Object[] v;
 
     //CLASS METHODS
-    public GrowingStack() {
+    public GrowingStack() {         //constructor
+        BUFFER = 1024;
+        v = new Object[BUFFER];
+        makeEmpty();
+    }
+    public GrowingStack(int buffer) {           //constructir user defined
+        BUFFER = buffer;
         v = new Object[BUFFER];
         makeEmpty();
     }
     public String toString() {              //Datas about the stack
-        String ret = "Stack virtual size: " + vSize + "\nStack capacity: " + BUFFER + "\nType: Growing\n\n";
+        String ret = "Stack virtual size: " + vSize + "\nStack capacity: " + BUFFER + "\nType: Growing";
         return(ret);
     }
     private Object[] resize(Object[] arr, int size) {           //makes the array bigger, in case of FullStackExcpetion
@@ -229,7 +247,84 @@ class GrowingStack implements Stack{
     }
 }
 
-/*
+class FixedQueue implements Queue {
+    //CLASS VARIABLES
+    private Object[] v;
+    private int vSize;
+    private int sPoint;
+    private int ePoint;
+    private final int BUFFER;
+
+    //CLASS METHODS
+    public FixedQueue() {
+        BUFFER = 1024;
+        v = new Object[BUFFER];
+        makeEmpty();
+    }
+    public FixedQueue(int buffer) {
+        BUFFER = buffer;
+        v = new Object[BUFFER];
+        makeEmpty();
+    }
+    public String toString() {              //Datas about the queue
+        String ret = "Queue virtual size: " + vSize + "\nQueue capacity: " + BUFFER + "\nType: Fixed";
+        return(ret);
+    }
+
+    //CONTAINER METHODS
+    public void makeEmpty() {
+        vSize = 0;
+        sPoint = 0;
+        ePoint = 0;
+    }
+    public boolean isEmpty() {
+        return (vSize == 0);
+    }
+    public String print() {
+        String ret = "[";
+        for (int i = 0; i < BUFFER; i++) {
+            ret += v[i];
+            if (i != BUFFER-1) {
+                ret += ", ";
+            }
+        }
+        ret+="]";
+        return ret;
+    }
+
+    //QUEUE METHODS
+    public void enqueue(Object obj) {
+        if (vSize == v.length) {
+            throw new FullQueueException();
+        }
+        vSize++;
+        sPoint %= v.length;
+        v[sPoint] = obj;
+        sPoint++;
+    }
+
+    public Object getFront() {
+        if (vSize == 0) {
+            throw new EmptyQueueException();
+        }
+        ePoint %= v.length;
+        return (v[ePoint]);
+    }
+
+    public Object dequeue() {
+        if (vSize == 0) {
+            throw new EmptyQueueException();
+        }
+        ePoint %= v.length;
+        Object temp = getFront();
+        vSize--;
+        ePoint++;
+
+        return (temp);
+    }
+}
+
+/*TODO:
  * class FixedQueue {
  *  
  * }
@@ -237,9 +332,6 @@ class GrowingStack implements Stack{
  * 
  * }
  * class GrowingQueue {
- * 
- * }
- * class FixedDeque {
  * 
  * }
  * class CycleDeque {
