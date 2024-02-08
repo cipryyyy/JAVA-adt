@@ -4,11 +4,11 @@
 LIFO method
 **Stack types**:
 
- - `FixedArray`, the BUFFER size is constant, if you add too many items it will throw a `FullStackException`.
+ - `FixedStack`, the BUFFER size is constant, if you add too many items it will throw a `FullStackException`.
  It's useful if you want to create a list of action without stressing the memory.
- - `GrowingArray`, the BUFFER size is variable, if you add too many items it will double the size.
+ - `GrowingStack`, the BUFFER size is variable, if you add too many items it will double the size.
 It's useful if you don't care about the memory usage.
-  - `CycleArray`, the BUFFER size is constant, if you add too many items it will start erasing the older items.
+  - `CycleStack`, the BUFFER size is constant, if you add too many items it will start erasing the older items.
 It is wrote with a `O(1)` complexity, so it is very efficient.
 Works better if you have to create an history.
 
@@ -25,13 +25,30 @@ Works better if you have to create an history.
 *return*: `Object obj`
 
 ## Queue
-*#TODO*
+
+FIFO method
+**Queue types**:
+
+ - `FixedQueue`, the BUFFER size is constant, if you add too many items it will throw a `FullQueueException`.
+It is designed with an `O(1)`, so the code is a bit complex.
+
+**Commands**:
+
+ - `enqueue()`, add an elements `obj` inside of the queue.
+*parameters*: `Object obj`
+*return*: `void`
+ - `getFront()`, returns the first element inserted.
+*parameters*: `None`
+*return*: `Object obj`
+ - `dequeue()`, return and remove the first element of the queue.
+*parameters*: `None`
+*return*: `Object obj`
 ## Deque
 *#TODO*
 
 
 ## About
-All the ADT shares these methods:
+All ADT types share these methods:
  - `isEmpty()`, checks if the ADT is empty.
 *parameters*: `None`
 *return*: `boolean`
