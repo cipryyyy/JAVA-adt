@@ -48,8 +48,34 @@ If `FullQueueException` is thrown, the BUFFER size doubles.
 *return*: `Object obj`
 
 ## Deque
-*#TODO*
+Work with LIFO and FIFO methods, it's a _Double Ended Queue_.
 
+**Queue types**:
+
+ - `FixedDeque`, the BUFFER size is constant, if you add too many items it will throw a `FullDequeException`.
+ - `CycleDeque` TODO
+ - `GrowingDeque`, TODO
+
+**Commands**:
+
+ - `enqueue()`, add an elements `obj` at the left side of the deque.
+*parameters*: `Object obj`
+*return*: `void`
+ - `getFront()`, returns the element at the left end of the deque.
+*parameters*: `None`
+*return*: `Object obj`
+ - `dequeue()`, return and remove the element at the left end of the deque.
+*parameters*: `None`
+*return*: `Object obj`
+ - `push()`, add an elements `obj` at the right end of the deque.
+*parameters*: `Object obj`
+*return*: `void`
+ - `top()`, returns the element at the right end of the deque.
+*parameters*: `None`
+*return*: `Object obj`
+ - `pop()`, return and remove the last element at the right end of the deque.
+*parameters*: `None`
+*return*: `Object obj`
 
 ## About
 All ADT types share these methods:
