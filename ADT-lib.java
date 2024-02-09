@@ -418,13 +418,13 @@ class GrowingQueue {                    //ERROR WHILE DEQUEUEING, DON'T USE
     }
     //no user defined constructor, buffer is reduced
     public String toString() {              //Datas about the queue
-        String ret = "Queue virtual size: " + vSize + "\nQueue capacity: " + BUFFER + "\nType: Cycle";
+        String ret = "Queue virtual size: " + vSize + "\nQueue capacity: " + BUFFER + "\nType: Growing";
         return(ret);
     }
-    private Object[] resize(Object[] arr, int actualIndex, int size) {      //RESIZE the queue
+    private Object[] resize(Object[] arr, int writeIndex, int readIndex, int size) {      //RESIZE the queue
         Object[] newArr = new Object[size];                         
-        System.arraycopy(arr, 0, newArr, 0, actualIndex);           //copies the element before the index at the start
-        System.arraycopy(arr, actualIndex, newArr, size-arr.length, arr.length-actualIndex);  //the element after at the end of the array
+        System.arraycopy(arr, 0, newArr, 0, writeIndex);           //copies the element before the index at the start
+        System.arraycopy(arr, readIndex, newArr, size-arr.length, arr.length-readIndex);  //the element after at the end of the array
         return newArr;
     }
 
@@ -452,8 +452,11 @@ class GrowingQueue {                    //ERROR WHILE DEQUEUEING, DON'T USE
     //QUEUE METHODS
     public void enQueue(Object obj) {           //add element to the queue
         if (vSize == BUFFER) {                      //If queue is full
-            BUFFER *=2;
-            v = resize(v, writeIndex, BUFFER);
+            if (writeIndex<readIndex){
+                readIndex += BUFFER;
+            }
+            BUFFER *= 2;
+            v = resize(v, writeIndex, readIndex, BUFFER);
         }
         vSize++;
         writeIndex %= v.length;             //If BUFFER is n size, and i go to index n(OutOfBound), i go to 0.
