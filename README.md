@@ -32,7 +32,8 @@ FIFO method
  - `FixedQueue`, the BUFFER size is constant, if you add too many items it will throw a `FullQueueException`.
 It is designed with an `O(1)`, so the code is a bit complex.
  - `CycleQueue`, the BUFFER size is constant, if you add too many items it will erase the older one and replace it with the newer one.
- - `GrowingQueue`, Doesn't work well, problem with the dequeue method.
+ - `GrowingQueue`, the BUFFER size can increase if the queue is full.
+If `FullQueueException` is thrown, the BUFFER size doubles.
 
 **Commands**:
 
