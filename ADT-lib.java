@@ -102,7 +102,7 @@ class CycleStack implements Stack {         //Memory action like
         makeEmpty();
     }
     public String toString() {      //Datas about the stack
-        String ret = "Stack virtual size: " + vSize + "\nStack capacity: " + BUFFER + "\nType: Cycle\nPins location: " + stopIndex + " - - " + addIndex;
+        String ret = "Stack virtual size: " + vSize + "\nStack capacity: " + BUFFER + "\nType: Cycle\nIndex: " + stopIndex + " " + addIndex;
         return(ret);
     }
 
@@ -599,17 +599,134 @@ class FixedDeque implements Stack, Queue{       //double ended Queue, method wil
         return  obj;
     }
 }
-class CycleDeque implements Stack, Queue{
-    public void makeEmpty(){}
-    public boolean isEmpty(){return true;}
-    public String print() {return "";}
-    public void push(Object obj) {}
-    public Object top() {return  1;}
-    public Object pop() {return  1;}
-    public void enqueue(Object obj){}
-    public Object getFront() {return  1;}
-    public Object dequeue() {return  1;}
+
+class CycleDeque implements Stack, Queue{       //double ended Queue, method will copy stack and queue but they will differ
+    //CLASS VARIABLES
+    final private int BUFFER;
+    private int vSize;
+    private int leftIndex;
+    private int rightIndex;
+    private Object[] v;
+
+    //CLASS METHODS
+    public CycleDeque() {               //constructor
+        BUFFER = 1024;
+        v = new Object[BUFFER];
+        makeEmpty();
+    }
+    public CycleDeque(int buffer) {               //constructor
+        BUFFER = buffer;
+        v = new Object[BUFFER];
+        makeEmpty();
+    }
+    public String toString() {              //Datas about the queue
+        String ret = "Deque virtual size: " + vSize + "\nDeque capacity: " + BUFFER + "\nType: Cycle"+"\nIndex: " + leftIndex + " " +rightIndex;
+        return(ret);
+    }
+
+    //CONTAINER METHODS
+    public void makeEmpty() {
+        vSize = 0;
+        leftIndex = 0;
+        rightIndex = 0;
+    }
+    public boolean isEmpty() {
+        return (vSize == 0)
+;    }
+    public String print() {
+        String ret = "[";
+        for (int i = 0; i < BUFFER; i++) {
+            ret += v[i];
+            if (i != BUFFER-1) {
+                ret += ", ";
+            }
+        }
+        ret+="]";
+        return ret;
+    }
+
+    //RIGHTSIDE
+    public void push(Object obj) {              //rightside will first add the element and the move the index
+        if (vSize == BUFFER) {
+            if (leftIndex == BUFFER-1) {
+                leftIndex = 0;
+            } else {
+                leftIndex++;
+            }
+        }
+        v[rightIndex] = obj;
+        if (vSize != BUFFER) {
+            vSize++;
+        }
+        if (rightIndex == BUFFER-1) {
+            rightIndex = 0;
+        } else {
+            rightIndex++;
+        }
+    }
+    public Object top() {                       //get the last element added
+        if (vSize == 0){
+            throw new EmptyDequeException();
+        }
+        Object obj = v[rightIndex-1];
+        return  obj;
+    }
+    public Object pop() {
+        if (vSize == 0){
+            throw new EmptyDequeException();
+        }
+        vSize--;
+        if (rightIndex == 0) {
+            rightIndex = BUFFER-1;
+        } else {
+            rightIndex--;
+        }
+        Object obj = v[rightIndex];
+        return  obj;
+    }
+
+    //LEFTSIDE
+    public void enqueue(Object obj){                //leftside will first move back, and the add the element
+        if (vSize == BUFFER){
+            if (rightIndex == 0) {
+                rightIndex = BUFFER-1;
+            } else {
+                rightIndex--;
+            }
+        }
+        if (leftIndex == 0) {
+            leftIndex = BUFFER-1;
+        } else {
+            leftIndex--;
+        }
+        if (vSize != BUFFER) {
+            vSize++;
+        }
+        v[leftIndex] = obj;
+
+    }
+    public Object getFront() {
+        if (vSize == 0){
+            throw new EmptyDequeException();
+        }
+        Object obj = v[leftIndex];
+        return  obj;
+    }
+    public Object dequeue() {
+        if (vSize == 0){
+            throw new EmptyDequeException();
+        }
+        Object obj = v[leftIndex];
+        if (leftIndex == BUFFER-1) {
+            leftIndex = 0;
+        } else {
+            leftIndex++;
+        }
+        vSize--;
+        return  obj;
+    }
 }
+
 class GrowingDeque implements Stack, Queue{
     public void makeEmpty(){}
     public boolean isEmpty(){return true;}
