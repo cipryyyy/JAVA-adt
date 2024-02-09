@@ -11,9 +11,9 @@ interface Stack extends Container {
     Object pop();               //use the first object (based on LIFO protocol)
 }
 interface Queue extends Container {
-    void enQueue(Object obj);   //add object to queue
+    void enqueue(Object obj);   //add object to queue
     Object getFront();          //read the first object that will be read
-    Object deQueue();           //use the first object (base on FIFO protocol)
+    Object dequeue();           //use the first object (base on FIFO protocol)
 }
 
 class FixedStack implements Stack{      //JAVA stack like
@@ -289,7 +289,7 @@ class FixedQueue implements Queue {         //Works like a waiting queue
     }
 
     //QUEUE METHODS
-    public void enQueue(Object obj) {           //add element to the queue
+    public void enqueue(Object obj) {           //add element to the queue
         if (vSize == BUFFER) {                      //If queue is full
             throw new FullQueueException();
         }
@@ -307,7 +307,7 @@ class FixedQueue implements Queue {         //Works like a waiting queue
         return (v[readIndex]);
     }
 
-    public Object deQueue() {               //'pop' method of the queue
+    public Object dequeue() {               //'pop' method of the queue
         if (vSize == 0) {
             throw new EmptyQueueException();
         }
@@ -366,7 +366,7 @@ class CycleQueue implements Queue {         //Careful with this one
     }
 
     //QUEUE METHODS
-    public void enQueue(Object obj) {
+    public void enqueue(Object obj) {
         if (vSize == BUFFER) {              //if the buffer is full, i move the readIndex
             readIndex++;                        //in this way I have a space in the queue
             readIndex %= BUFFER;                //obviously the first element will be erased
@@ -389,7 +389,7 @@ class CycleQueue implements Queue {         //Careful with this one
         return (v[readIndex]);
     }
 
-    public Object deQueue() {
+    public Object dequeue() {
         if (vSize == 0) {
             throw new EmptyQueueException();
         }
@@ -412,7 +412,7 @@ class GrowingQueue {                    //ERROR WHILE DEQUEUEING, DON'T USE
 
     //CLASS METHODS
     public GrowingQueue() {           //constructor
-        BUFFER = 4;
+        BUFFER = 128;
         v = new Object[BUFFER];
         makeEmpty();
     }
@@ -450,7 +450,7 @@ class GrowingQueue {                    //ERROR WHILE DEQUEUEING, DON'T USE
     }
 
     //QUEUE METHODS
-    public void enQueue(Object obj) {           //add element to the queue
+    public void enqueue(Object obj) {           //add element to the queue
         if (vSize == BUFFER) {                      //If queue is full
             if (writeIndex<readIndex){
                 readIndex += BUFFER;
@@ -472,7 +472,7 @@ class GrowingQueue {                    //ERROR WHILE DEQUEUEING, DON'T USE
         return (v[readIndex]);
     }
 
-    public Object deQueue() {           //ERROR while reading values
+    public Object dequeue() {           //ERROR while reading values
         if (vSize == 0) {
             throw new EmptyQueueException();
         }
@@ -485,19 +485,154 @@ class GrowingQueue {                    //ERROR WHILE DEQUEUEING, DON'T USE
     }
 }
 
-/*TODO:
- * class FixedDeque {
- * 
- * }
- * class CycleDeque {
- * 
- * }
- * class GrowingDeque {
- * 
- * }
-*/
+class FixedDeque implements Stack, Queue{       //double ended Queue, method will copy stack and queue but they will differ
+    //CLASS VARIABLES
+    final private int BUFFER;
+    private int vSize;
+    private int leftIndex;
+    private int rightIndex;
+    private Object[] v;
+
+    //CLASS METHODS
+    public FixedDeque() {               //constructor
+        BUFFER = 1024;
+        v = new Object[BUFFER];
+        makeEmpty();
+    }
+    public FixedDeque(int buffer) {               //constructor
+        BUFFER = buffer;
+        v = new Object[BUFFER];
+        makeEmpty();
+    }
+    public String toString() {              //Datas about the queue
+        String ret = "Deque virtual size: " + vSize + "\nDeque capacity: " + BUFFER + "\nType: Fixed"+"\nIndex: " + leftIndex + " " +rightIndex;
+        return(ret);
+    }
+
+    //CONTAINER METHODS
+    public void makeEmpty() {
+        vSize = 0;
+        leftIndex = 0;
+        rightIndex = 0;
+    }
+    public boolean isEmpty() {
+        return (vSize == 0)
+;    }
+    public String print() {
+        String ret = "[";
+        for (int i = 0; i < BUFFER; i++) {
+            ret += v[i];
+            if (i != BUFFER-1) {
+                ret += ", ";
+            }
+        }
+        ret+="]";
+        return ret;
+    }
+
+    //RIGHTSIDE
+    public void push(Object obj) {              //rightside will first add the element and the move the index
+        if (vSize == BUFFER) {
+            throw new FullDequeException();
+        }
+        v[rightIndex] = obj;
+        vSize++;
+        if (rightIndex == BUFFER-1) {
+            rightIndex = 0;
+        } else {
+            rightIndex++;
+        }
+    }
+    public Object top() {                       //get the last element added
+        if (vSize == 0){
+            throw new EmptyDequeException();
+        }
+        Object obj = v[rightIndex-1];
+        return  obj;
+    }
+    public Object pop() {
+        if (vSize == 0){
+            throw new EmptyDequeException();
+        }
+        vSize--;
+        if (rightIndex == 0) {
+            rightIndex = BUFFER-1;
+        } else {
+            rightIndex--;
+        }
+        Object obj = v[rightIndex];
+        return  obj;
+    }
+
+    //LEFTSIDE
+    public void enqueue(Object obj){                //leftside will first move back, and the add the element
+        if (vSize == BUFFER){
+            throw new FullDequeException();
+        }
+        if (leftIndex == 0) {
+            leftIndex = BUFFER-1;
+        } else {
+            leftIndex--;
+        }
+        v[leftIndex] = obj;
+        vSize++;
+
+    }
+    public Object getFront() {
+        if (vSize == 0){
+            throw new EmptyDequeException();
+        }
+        Object obj = v[leftIndex];
+        return  obj;
+    }
+    public Object dequeue() {
+        if (vSize == 0){
+            throw new EmptyDequeException();
+        }
+        Object obj = v[leftIndex];
+        if (leftIndex == BUFFER-1) {
+            leftIndex = 0;
+        } else {
+            leftIndex++;
+        }
+        vSize--;
+        return  obj;
+    }
+}
+class CycleDeque implements Stack, Queue{
+    public void makeEmpty(){}
+    public boolean isEmpty(){return true;}
+    public String print() {return "";}
+    public void push(Object obj) {}
+    public Object top() {return  1;}
+    public Object pop() {return  1;}
+    public void enqueue(Object obj){}
+    public Object getFront() {return  1;}
+    public Object dequeue() {return  1;}
+}
+class GrowingDeque implements Stack, Queue{
+    public void makeEmpty(){}
+    public boolean isEmpty(){return true;}
+    public String print() {return "";}
+    public void push(Object obj) {}
+    public Object top() {return  1;}
+    public Object pop() {return  1;}
+    public void enqueue(Object obj){}
+    public Object getFront() {return  1;}
+    public Object dequeue() {return  1;}
+}
 
 //EXCEPTIONS
+class FullStackException extends RuntimeException {         //Exception thrown if the stack is full
+    public String toString() {
+        return("Stack is full");
+    }
+}
+class EmptyStackException extends RuntimeException {         //Exception thrown if the stack is empty  
+    public String toString() {
+        return("Stack is empty");
+    }
+}
 class FullQueueException extends RuntimeException {         //Exception thrown if the queue is full
     public String toString() {
         return("Queue is full");
@@ -508,13 +643,13 @@ class EmptyQueueException extends RuntimeException {         //Exception thrown 
         return("Queue is empty");
     }
 }
-class FullStackException extends RuntimeException {         //Exception thrown if the stack is full
+class FullDequeException extends RuntimeException {         //Exception thrown if the deque is full
     public String toString() {
-        return("Stack is full");
+        return("Deque is full");
     }
 }
-class EmptyStackException extends RuntimeException {         //Exception thrown if the stack is empty  
+class EmptyDequeException extends RuntimeException {         //Exception thrown if the deque is empty
     public String toString() {
-        return("Stack is empty");
+        return("Deque is empty");
     }
 }
