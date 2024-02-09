@@ -31,6 +31,8 @@ FIFO method
 
  - `FixedQueue`, the BUFFER size is constant, if you add too many items it will throw a `FullQueueException`.
 It is designed with an `O(1)`, so the code is a bit complex.
+ - `CycleQueue`, the BUFFER size is constant, if you add too many items it will erase the older one and replace it with the newer one.
+ - `GrowingQueue`, Doesn't work well, problem with the dequeue method.
 
 **Commands**:
 
@@ -43,6 +45,7 @@ It is designed with an `O(1)`, so the code is a bit complex.
  - `dequeue()`, return and remove the first element of the queue.
 *parameters*: `None`
 *return*: `Object obj`
+
 ## Deque
 *#TODO*
 
@@ -64,5 +67,3 @@ You can change the **BUFFER** when you define the object, by default is set at `
 FixedStack myStack = new FixedStack(); //BUFFER = 1024
 FixedStack myStack = new FixedStack(8); //BUFFER = 8
 ```
-
-
