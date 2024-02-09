@@ -17,7 +17,6 @@ interface Queue extends Container {
 }
 
 class FixedStack implements Stack{      //JAVA stack like
-
     //CLASS VARIABLES
     private final int BUFFER;       //FIXED buffer
     private int vSize;                    //virtual size
@@ -29,11 +28,13 @@ class FixedStack implements Stack{      //JAVA stack like
         v = new Object[BUFFER];
         makeEmpty();                        //set the size to 0
     }
+    //overloading
     public FixedStack(int buffer) {                   //constructor user defined
         BUFFER = buffer;
         v = new Object[BUFFER];
         makeEmpty();                        //set the size to 0
     }
+
     public String toString() {              //datas about the stack
         String ret = "Stack virtual size: " + vSize + "\nStack capacity: " + BUFFER + "\nType: Fixed";
         return(ret);
@@ -43,9 +44,11 @@ class FixedStack implements Stack{      //JAVA stack like
     public boolean isEmpty() {          //Check if stack is empty
         return (vSize == 0);
     }
+
     public void makeEmpty() {           //Make the stack empty 
         vSize = 0;
     }
+
     public String print() {
         String ret = "[";
         for (int i = 0; i < BUFFER; i++) {
@@ -66,6 +69,7 @@ class FixedStack implements Stack{      //JAVA stack like
         v[vSize] = obj;                 //add the element
         vSize++;                        //increment the virtual size
     }
+
     public Object pop() {               //remove
         if (vSize == 0) {                   //If it's empty it throws runtime type error
             throw new EmptyStackException();
@@ -74,6 +78,7 @@ class FixedStack implements Stack{      //JAVA stack like
         vSize--;                            //decrement logic size
         return(obj);
     }
+
     public Object top() {               //last element
         if (vSize == 0) {
             throw new EmptyStackException();
@@ -96,11 +101,13 @@ class CycleStack implements Stack {         //Memory action like
         v = new Object[BUFFER];
         makeEmpty();
     }
+    //overloading
     public CycleStack(int buffer) {       //constructor user defined
         BUFFER = buffer;
         v = new Object[BUFFER];
         makeEmpty();
     }
+
     public String toString() {      //Datas about the stack
         String ret = "Stack virtual size: " + vSize + "\nStack capacity: " + BUFFER + "\nType: Cycle\nIndex: " + stopIndex + " " + addIndex;
         return(ret);
@@ -118,9 +125,11 @@ class CycleStack implements Stack {         //Memory action like
         ret+="]";
         return ret;
     }
+
     public boolean isEmpty() {          //Check line 30 for info
         return (vSize == 0);
     }
+
     public void makeEmpty() {           //Check line 33 for info
         stopIndex = 0;
         addIndex = 0;
@@ -151,6 +160,7 @@ class CycleStack implements Stack {         //Memory action like
             }
         }
     }
+
     public Object top(){
         if (vSize == 0) {                   //check if stack is empty
             throw new EmptyStackException();
@@ -161,6 +171,7 @@ class CycleStack implements Stack {         //Memory action like
             return v[addIndex-1];
         }
     }
+
     public Object pop(){
         if (vSize == 0) {
             throw new EmptyStackException();
@@ -188,7 +199,7 @@ class GrowingStack implements Stack{        //If you hate the FullStackException
         v = new Object[BUFFER];
         makeEmpty();
     }
-    //there is no user defined constrcutor and the buffer is reduced to save memory (if possible)
+    //there is no user defined constructor and the buffer is reduced to save memory (if possible)
     public String toString() {              //Datas about the stack
         String ret = "Stack virtual size: " + vSize + "\nStack capacity: " + BUFFER + "\nType: Growing";
         return(ret);
@@ -211,9 +222,11 @@ class GrowingStack implements Stack{        //If you hate the FullStackException
         ret+="]";
         return ret;
     }
+
     public boolean isEmpty() {                  //Check line 30 for info
         return (vSize == 0);
     }
+
     public void makeEmpty() {                   //Check line 33 for info
         vSize = 0;
     }
@@ -227,6 +240,7 @@ class GrowingStack implements Stack{        //If you hate the FullStackException
         v[vSize] = obj;
         vSize++;
     }
+
     public Object pop() {               //pop method, identical to FixedStack one
         if (vSize == 0) {
             throw new EmptyStackException();
@@ -235,6 +249,7 @@ class GrowingStack implements Stack{        //If you hate the FullStackException
         vSize--;
         return(obj);
     }
+
     public Object top() {               //top method, identical to FixedStack one
         if (vSize == 0) {
             throw new EmptyStackException();
@@ -257,11 +272,14 @@ class FixedQueue implements Queue {         //Works like a waiting queue
         v = new Object[BUFFER];
         makeEmpty();
     }
+
+    //overloading
     public FixedQueue(int buffer) {     //constructor user defined
         BUFFER = buffer;
         v = new Object[BUFFER];
         makeEmpty();
     }
+
     public String toString() {              //Datas about the queue
         String ret = "Queue virtual size: " + vSize + "\nQueue capacity: " + BUFFER + "\nType: Fixed";
         return(ret);
@@ -273,9 +291,11 @@ class FixedQueue implements Queue {         //Works like a waiting queue
         writeIndex = 0;
         readIndex = 0;
     }
+
     public boolean isEmpty() {
         return (vSize == 0);
     }
+
     public String print() {
         String ret = "[";
         for (int i = 0; i < BUFFER; i++) {
@@ -334,11 +354,13 @@ class CycleQueue implements Queue {         //Careful with this one
         v = new Object[BUFFER];
         makeEmpty();
     }
+    //overloading
     public CycleQueue(int buffer) {     //constructor user defined
         BUFFER = buffer;
         v = new Object[BUFFER];
         makeEmpty();
     }
+
     public String toString() {              //Datas about the queue
         String ret = "Queue virtual size: " + vSize + "\nQueue capacity: " + BUFFER + "\nType: Cycle";
         return(ret);
@@ -350,9 +372,11 @@ class CycleQueue implements Queue {         //Careful with this one
         writeIndex = 0;
         readIndex = 0;
     }
+
     public boolean isEmpty() {
         return (vSize == 0);
     }
+
     public String print() {
         String ret = "[";
         for (int i = 0; i < BUFFER; i++) {
@@ -402,7 +426,7 @@ class CycleQueue implements Queue {         //Careful with this one
     }
 }
 
-class GrowingQueue {                    //ERROR WHILE DEQUEUEING, DON'T USE
+class GrowingQueue {
     //CLASS VARIABLES
     private Object[] v;
     private int vSize;
@@ -416,6 +440,7 @@ class GrowingQueue {                    //ERROR WHILE DEQUEUEING, DON'T USE
         v = new Object[BUFFER];
         makeEmpty();
     }
+
     //no user defined constructor, buffer is reduced
     public String toString() {              //Datas about the queue
         String ret = "Queue virtual size: " + vSize + "\nQueue capacity: " + BUFFER + "\nType: Growing";
@@ -434,9 +459,11 @@ class GrowingQueue {                    //ERROR WHILE DEQUEUEING, DON'T USE
         writeIndex = 0;
         readIndex = 0;
     }
+
     public boolean isEmpty() {
         return (vSize == 0);
     }
+
     public String print() {
         String ret = "[";
         for (int i = 0; i < BUFFER; i++) {
@@ -499,11 +526,13 @@ class FixedDeque implements Stack, Queue{       //double ended Queue, method wil
         v = new Object[BUFFER];
         makeEmpty();
     }
+
     public FixedDeque(int buffer) {               //constructor
         BUFFER = buffer;
         v = new Object[BUFFER];
         makeEmpty();
     }
+
     public String toString() {              //Datas about the queue
         String ret = "Deque virtual size: " + vSize + "\nDeque capacity: " + BUFFER + "\nType: Fixed"+"\nIndex: " + queueIndex + " " +stackIndex;
         return(ret);
@@ -515,9 +544,11 @@ class FixedDeque implements Stack, Queue{       //double ended Queue, method wil
         queueIndex = 0;
         stackIndex = 0;
     }
+
     public boolean isEmpty() {
-        return (vSize == 0)
-;    }
+        return (vSize == 0);
+    }
+
     public String print() {
         String ret = "[";
         for (int i = 0; i < BUFFER; i++) {
@@ -543,6 +574,7 @@ class FixedDeque implements Stack, Queue{       //double ended Queue, method wil
             stackIndex++;
         }
     }
+
     public Object top() {                       //get the last element added
         if (vSize == 0){
             throw new EmptyDequeException();
@@ -550,6 +582,7 @@ class FixedDeque implements Stack, Queue{       //double ended Queue, method wil
         Object obj = v[stackIndex-1];
         return  obj;
     }
+
     public Object pop() {
         if (vSize == 0){
             throw new EmptyDequeException();
@@ -585,6 +618,7 @@ class FixedDeque implements Stack, Queue{       //double ended Queue, method wil
         Object obj = v[queueIndex];
         return  obj;
     }
+
     public Object dequeue() {
         if (vSize == 0){
             throw new EmptyDequeException();
@@ -614,11 +648,13 @@ class CycleDeque implements Stack, Queue{       //double ended Queue, method wil
         v = new Object[BUFFER];
         makeEmpty();
     }
+
     public CycleDeque(int buffer) {               //constructor
         BUFFER = buffer;
         v = new Object[BUFFER];
         makeEmpty();
     }
+
     public String toString() {              //Datas about the queue
         String ret = "Deque virtual size: " + vSize + "\nDeque capacity: " + BUFFER + "\nType: Cycle"+"\nIndex: " + queueIndex + " " +stackIndex;
         return(ret);
@@ -630,9 +666,11 @@ class CycleDeque implements Stack, Queue{       //double ended Queue, method wil
         queueIndex = 0;
         stackIndex = 0;
     }
+
     public boolean isEmpty() {
         return (vSize == 0);
     }
+
     public String print() {
         String ret = "[";
         for (int i = 0; i < BUFFER; i++) {
@@ -664,6 +702,7 @@ class CycleDeque implements Stack, Queue{       //double ended Queue, method wil
             stackIndex++;
         }
     }
+
     public Object top() {                       //get the last element added
         if (vSize == 0){
             throw new EmptyDequeException();
@@ -671,6 +710,7 @@ class CycleDeque implements Stack, Queue{       //double ended Queue, method wil
         Object obj = v[stackIndex-1];
         return  obj;
     }
+
     public Object pop() {
         if (vSize == 0){
             throw new EmptyDequeException();
@@ -742,6 +782,12 @@ class GrowingDeque implements Stack, Queue{
         v = new Object[BUFFER];
         makeEmpty();
     }
+
+    public String toString() {              //Datas about the queue
+        String ret = "Deque virtual size: " + vSize + "\nDeque capacity: " + BUFFER + "\nType: Growing"+"\nIndex: " + queueIndex + " " +stackIndex;
+        return(ret);
+    }
+
     private Object[] resize(Object[] arr, int queueIndex, int stackIndex, int size) {
         Object[] newArr = new Object[size];
         if (queueIndex > stackIndex) {
@@ -753,15 +799,18 @@ class GrowingDeque implements Stack, Queue{
         }
         return newArr;
     }
+
     //CONTAINER METHODS
     public void makeEmpty(){
         vSize = 0;
         queueIndex = 0;
         stackIndex = 0;
     }
+
     public boolean isEmpty(){
         return (vSize == 0);
     }
+
     public String print() {
         String ret = "[";
         for (int i = 0; i < BUFFER; i++) {
@@ -793,6 +842,7 @@ class GrowingDeque implements Stack, Queue{
             stackIndex++;
         }
     }
+
     public Object top() {                       //get the last element added
         if (vSize == 0){
             throw new EmptyDequeException();
@@ -800,6 +850,7 @@ class GrowingDeque implements Stack, Queue{
         Object obj = v[stackIndex-1];
         return  obj;
     }
+
     public Object pop() {
         if (vSize == 0){
             throw new EmptyDequeException();
@@ -816,8 +867,12 @@ class GrowingDeque implements Stack, Queue{
 
     //LEFTSIDE METHODS
     public void enqueue(Object obj){
-        if (vSize == BUFFER){
-                                                    //TODO
+        if (vSize == BUFFER) {
+            if (queueIndex>stackIndex) {
+                queueIndex += BUFFER;
+            }
+            BUFFER *= 2;
+            v = resize(v, queueIndex, stackIndex, vSize);
         }
         if (queueIndex == 0) {
             queueIndex = BUFFER-1;
@@ -837,6 +892,7 @@ class GrowingDeque implements Stack, Queue{
         Object obj = v[queueIndex];
         return  obj;
     }
+
     public Object dequeue() {
         if (vSize == 0){
             throw new EmptyDequeException();
