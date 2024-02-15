@@ -94,3 +94,7 @@ You can change the **BUFFER** when you define the object, by default is set at `
 FixedStack myStack = new FixedStack(); //BUFFER = 1024
 FixedStack myStack = new FixedStack(8); //BUFFER = 8
 ```
+
+#Further implementations
+
+Maps, trees, tables
