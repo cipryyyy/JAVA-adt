@@ -1,4 +1,6 @@
-interface Container {       //Common methods between ADTs
+package javaFile;           //package definition
+
+interface Container{       //Common methods between ADTs
     //@version: 1.0
     boolean isEmpty();      //Check if the container is virtually empty
     void makeEmpty();       //Erase virtual size
@@ -15,6 +17,27 @@ interface Queue extends Container {
     void enqueue(Object obj);   //add object to queue
     Object getFront();          //read the first object that will be read
     Object dequeue();           //use the first object (base on FIFO protocol)
+}
+interface Set extends Container {
+    //@version: 1.1
+    void add(Object obj);        //add object to set
+    boolean contains(Object obj);   //check if the object is in the set
+    Object[] toArray();         //return the set in an array
+}
+interface sortedSet extends Set {
+    //@version: 1.1
+    void add(Comparable obj);        //add object to set
+    Comparable[] toSortedArray();     //return the set in a sorted array
+
+}
+interface Map extends Container {
+    Object get(Object key);
+    Object remove(Object key);
+    Object put(Object key, Object value);
+    Object getKeys();
+}
+interface sortedMap extends Map, Comparable {
+    Comparable[] sortedKeys();
 }
 
 class FixedStack implements Stack{      //JAVA stack like
@@ -1016,6 +1039,212 @@ class GrowingDeque implements Stack, Queue{
         return  obj;
     }
 }
+
+class UnsortedSet implements Set {
+    //@version: 1.1
+    //CLASS VARIABLES
+    private int BUFFER;            //buffer is a variable
+    private int vSize;
+    private Object[] v;
+
+    //CLASS METHODS
+    public UnsortedSet() {               //constructor
+        BUFFER = 1;
+        v = new Object[BUFFER];
+        makeEmpty();
+    }
+
+    public String toString() {              //datas about the stack
+        //@return: string with the datas
+        String ret = "Set virtual size: " + vSize +"\nType: Unsorted";
+        return(ret);
+    }
+
+    private Object[] resize(Object[] arr, int size) {
+        //@parameters: arr: array to be resized, size: new size of the array
+        //@return: the new array with the same elements but with a bigger size
+        Object[] newArr = new Object[size];
+        System.arraycopy(arr, 0, newArr, 0, arr.length);
+        return newArr;
+    }
+
+    //CONTAINER METHODS
+    public boolean isEmpty(){
+        //@return: true if the set is empty
+        return (vSize == 0);
+    }
+
+    public void makeEmpty(){
+        vSize = 0;
+    }
+
+    public String print() {
+        //@return: the set in a string format
+        String ret = "[";
+        for (int i = 0; i < BUFFER; i++) {
+            ret += v[i];
+            if (i != BUFFER-1) {
+                ret += ", ";
+            }
+        }
+        ret+="]";
+        return ret;
+    }
+
+    //SET METHODS
+    public void add(Object obj) {
+        //@param obj: element to be added to the set
+        if (contains(obj)) {
+            return;         //if the element is already in the set, it will not be added
+        }
+        if (vSize == BUFFER) {          //if the set is full, it will double the size
+            BUFFER += 1;
+            v = resize(v, BUFFER);
+        }
+        v[vSize] = obj;
+        vSize++;
+    }
+
+    public boolean contains(Object obj) {           //check if the element is already in the set
+        boolean isContained = false;
+        for (int i = 0; i < vSize; i++) {
+            if(v[i] == obj) {
+                isContained = true;
+                break;
+            }
+        }
+        return isContained;
+    }
+
+    public Object[] toArray() {             //return the set in an array
+        //@return: the set in an array
+        Object[] arr = new Object[vSize];
+        System.arraycopy(v, 0, arr, 0, vSize);
+        return arr;
+    }
+
+    public Set merge(Set firstSet, Set secondSet) {
+        Set mergedSet = new UnsortedSet();
+        Object[] s1 = firstSet.toArray();
+        Object[] s2 = secondSet.toArray();
+
+        for (int i = 0; i < s1.length; i++) {       //Adds objects from the first set
+            mergedSet.add(s1[i]);                   //Adds objects from the second set
+        }
+        for (int i = 0; i < s2.length; i++) {
+            mergedSet.add(s2[i]);
+        }
+        return mergedSet;
+    }
+
+    public Set intersect(Set firstSet, Set secondSet) {
+        Set intersectedSet = new UnsortedSet();
+        Object[] s1 = firstSet.toArray();
+
+        for (int i = 0; i < s1.length; i++) {           //for each element in the first set
+            if (secondSet.contains(s1[i])) {            //if the element is in the second set
+                intersectedSet.add(s1[i]);              //it will be added to the intersected set
+            }
+        }
+        return intersectedSet;
+    }
+
+    public Set subtract(Set firstSet, Set secondSet) {
+        Set subtractedSet = new UnsortedSet();
+        Object[] s1 = firstSet.toArray();
+
+        for (int i = 0; i < s1.length; i++) {           //for each element in the first set
+            if (!secondSet.contains(s1[i])) {           //if the element is not in the second set
+                subtractedSet.add(s1[i]);               //it will be added to the subtracted set
+            }
+        }
+        return subtractedSet;
+    }
+}
+/*  **********************************************************************************************************************
+
+        TO-DO
+
+class SortedSet implements sortedSet{
+    //@version: 1.1
+    //CLASS VARIABLES
+    private int BUFFER;
+    private int vSize;
+    private Object[] v;
+
+    //CLASS METHODS
+    public SortedSet() {               //constructor
+        BUFFER = 1;
+        v = new Object[BUFFER];
+        makeEmpty();
+    }
+
+    public String toString() {              //datas about the stack
+        //@return: string with the datas
+        String ret = "Set virtual size: " + vSize +"\nType: Unsorted";
+        return(ret);
+    }
+
+
+    private Object[] resize(Object[] arr, int size) {
+        //@parameters: arr: array to be resized, size: new size of the array
+        //@return: the new array with the same elements but with a bigger size
+        Object[] newArr = new Object[size];
+        System.arraycopy(arr, 0, newArr, 0, arr.length);
+        return newArr;
+    }
+
+    //CONTAINER METHODS
+    public boolean isEmpty(){
+        //@return: true if the set is empty
+        return (vSize == 0);
+    }
+
+    public void makeEmpty(){
+        vSize = 0;
+    }
+
+    public String print() {
+        //@return: the set in a string format
+        String ret = "[";
+        for (int i = 0; i < BUFFER; i++) {
+            ret += v[i];
+            if (i != BUFFER-1) {
+                ret += ", ";
+            }
+        }
+        ret+="]";
+        return ret;
+    }
+
+    public Comparable[] toSortedArray() {
+        Comparable[] x = new Comparable[vSize];
+        System.arraycopy(v, 0, x, 0, vSize);
+        return x;
+    }
+
+    public Object[] toArray() {
+        return toSortedArray();
+    }
+}
+
+class Map {
+
+}
+
+class SortedMap {
+
+}
+
+class Table {
+
+}
+
+class HashTable {
+
+}
+
+*/
 
 //EXCEPTIONS
 class FullStackException extends RuntimeException {         //Exception thrown if the stack is full
